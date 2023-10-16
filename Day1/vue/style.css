@@ -1,0 +1,18 @@
+.red {
+  color: red;
+}
+
+.black {
+  color: black;
+}
+
+.green {
+  width: 100px;
+  height: 100px;
+  background-color: green;
+}
+
+.center {
+  width: 28%;
+  margin: 0 auto;
+}

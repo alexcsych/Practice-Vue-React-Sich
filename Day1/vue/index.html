@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script defer src="index.js"></script>
+  </head>
+  <body>
+    <div class="center" id="app">
+      <input type="radio" name="author" v-model="isAuthor" value="exist" /> Є
+      автор
+      <input type="radio" name="author" v-model="isAuthor" value="" /> Нема
+      автора
+      <br />
+      <div class="quote" v-for="qt in filteredQuotes">
+        <h3 v-bind:class="qt.quote.length > 40 ? 'red' : 'black'">
+          {{ qt.quote }}
+        </h3>
+        <p>{{ qt.source }}</p>
+      </div>
+      <button @click="sortBySource()">Сортувати</button>
+      <div class="quote" v-for="qt in sortedQuotes">
+        <h3>{{ qt.quote }}</h3>
+        <p>{{ qt.source }}</p>
+      </div>
+    </div>
+  </body>
+</html>
