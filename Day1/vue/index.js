@@ -37,9 +37,9 @@ new Vue({
   },
   methods: {
     sortBySource () {
-      this.sortedQuotes = this.quotes.sort((a, b) =>
-        a.source > b.source ? 1 : -1
-      )
+      this.sortedQuotes = this.quotes
+        .slice()
+        .sort((a, b) => (a.source > b.source ? 1 : -1))
     }
   }
 })
