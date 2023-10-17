@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
+    <script defer src="index.js"></script>
+  </head>
+  <body>
+    <div class="center" id="app">
+      <h1>Пошук</h1>
+      <input type="text" name="search" v-model="search" />
+      <table>
+        <thead>
+          <tr>
+            <th>ПІБ</th>
+            <th>Група</th>
+            <th>Рік народження</th>
+            <th>Здав практичну</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody v-for="st in students">
+          <tr>
+            <td
+              :class="st.fullName.includes(search) && search!==''  ? 'red' : 'black'"
+            >
+              {{ st.fullName }}
+            </td>
+            <td>{{ st.group }}</td>
+            <td>{{ st.birthYear }}</td>
+            <td>
+              <input
+                type="checkbox"
+                name="isPassedExam"
+                v-model="st.isPassedExam"
+              />
+              {{ st.isPassedExam }}
+            </td>
+            <td>
+              <button @click="deleteStudent(st)">DELETE</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
