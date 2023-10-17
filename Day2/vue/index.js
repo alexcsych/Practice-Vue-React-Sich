@@ -19,17 +19,32 @@ var studentsArray = [
   }
 ]
 
-new Vue({
-  el: '#app',
-  data: {
-    students: studentsArray,
-    search: ''
-  },
-  methods: {
-    deleteStudent (student) {
-      this.students = this.students.filter(st => {
+const { createApp, ref, computed } = Vue
+createApp({
+  setup () {
+    let students = ref(studentsArray)
+    let search = ref('')
+
+    const deleteStudent = student => {
+      students.value = [...students.value].filter(st => {
         return st !== student
       })
     }
+    return { students, search, deleteStudent }
   }
-})
+}).mount('#app')
+
+// new Vue({
+//   el: '#app',
+//   data: {
+//     students: studentsArray,
+//     search: ''
+//   },
+//   methods: {
+//     deleteStudent (student) {
+//       this.students = this.students.filter(st => {
+//         return st !== student
+//       })
+//     }
+//   }
+// })
