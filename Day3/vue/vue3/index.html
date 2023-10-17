@@ -55,14 +55,20 @@
             type="text"
             id="fullName"
             name="fullName"
-            v-model="fullName"
+            v-model.trim="fullName"
             required
           />
         </div>
 
         <div class="form-group">
           <label for="group">Група</label>
-          <input type="text" id="group" name="group" v-model="group" required />
+          <input
+            type="text"
+            id="group"
+            name="group"
+            v-model.trim="group"
+            required
+          />
         </div>
 
         <div class="form-group">
