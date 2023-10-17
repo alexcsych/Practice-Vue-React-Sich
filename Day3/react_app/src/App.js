@@ -7,7 +7,7 @@ function App () {
   const [studentList, setStudentList] = useState(students)
   const [fullName, setFullName] = useState('')
   const [group, setGroup] = useState('')
-  const [birthYear, setBirthYear] = useState(NaN)
+  const [birthYear, setBirthYear] = useState('')
   const [isPassedExam, setIsPassedExam] = useState(false)
 
   const checkboxHandler = index => {
@@ -91,33 +91,33 @@ function App () {
         </tbody>
       </table>
       <h2>Додати учня</h2>
-      <form onSubmit={createStudent} class={styles.studentForm}>
-        <div class={styles.formGroup}>
-          <label for='fullName'>ПІБ</label>
+      <form onSubmit={createStudent} className={styles.studentForm}>
+        <div className={styles.formGroup}>
+          <label>ПІБ</label>
           <input
             type='text'
             id='fullName'
             name='fullName'
-            onChange={e => setFullName(e.target.value)}
+            onChange={e => setFullName(e.target.value.trim())}
             value={fullName}
             required
           />
         </div>
 
-        <div class={styles.formGroup}>
-          <label for='group'>Група</label>
+        <div className={styles.formGroup}>
+          <label>Група</label>
           <input
             type='text'
             id='group'
             name='group'
-            onChange={e => setGroup(e.target.value)}
+            onChange={e => setGroup(e.target.value.trim())}
             value={group}
             required
           />
         </div>
 
-        <div class={styles.formGroup}>
-          <label for='birthYear'>Рік народження</label>
+        <div className={styles.formGroup}>
+          <label>Рік народження</label>
           <input
             type='number'
             id='birthYear'
@@ -128,18 +128,18 @@ function App () {
           />
         </div>
 
-        <div class={styles.formGroup}>
-          <label for='isPassedExam'>Здав</label>
+        <div className={styles.formGroup}>
+          <label>Здав</label>
           <input
             type='checkbox'
             id='isPassedExam'
             name='isPassedExam'
-            onChange={e => setIsPassedExam(e.target.value)}
+            onChange={e => setIsPassedExam(e.target.checked)}
             value={isPassedExam}
           />
         </div>
 
-        <button type='submit' class={styles.submitButton}>
+        <button type='submit' className={styles.submitButton}>
           Submit
         </button>
       </form>
