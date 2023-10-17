@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
+    <script defer src="index.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <span style="font-size: 25px">EnterAge:</span>
+      <input v-model.number="age" type="number" />
+      <span style="font-size: 25px">EnterMessage:</span>
+      <input v-model.lazy="msg" />
+      <span style="font-size: 25px">EnterMessage : </span>
+      <input v-model.trim="message" />
+      <div>age: {{ age }}</div>
+      <div>msg: {{ msg }}</div>
+      <div>message: {{ message }}</div>
+    </div>
+  </body>
+</html>
