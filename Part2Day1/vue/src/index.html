@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="main.js"></script>
+  </head>
+  <body>
+    <div class="center" id="app">
+      <h1>Пошук</h1>
+      <input type="text" name="search" v-model="search" />
+      <table>
+        <thead>
+          <tr>
+            <th>Ім'я</th>
+            <th>Група</th>
+            <th>Оцінка</th>
+            <th>Здав</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(st, index) in students" :key="index">
+            <td
+              :class="st.name.includes(search) && search !== ''  ? 'red' : 'black'"
+            >
+              {{ st.name }}
+            </td>
+            <td>{{ st.group }}</td>
+            <td>{{ st.mark }}</td>
+            <td>
+              <input type="checkbox" name="isDonePr" v-model="st.isDonePr" />
+              {{ st.isDonePr }}
+            </td>
+            <td>
+              <button @click="deleteStudent(index)">DELETE</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Додати учня</h2>
+      <form @submit.prevent="createStudent(newStudent)" class="student-form">
+        <div class="form-group">
+          <label for="name">Ім'я</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            v-model.trim="newStudent.name"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="group">Група</label>
+          <input
+            type="text"
+            id="group"
+            name="group"
+            v-model.trim="newStudent.group"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="mark">Оцінка</label>
+          <input
+            type="number"
+            id="mark"
+            name="mark"
+            v-model="newStudent.mark"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="isDonePr">Здав</label>
+          <input
+            type="checkbox"
+            id="isDonePr"
+            name="isDonePr"
+            v-model="newStudent.isDonePr"
+          />
+        </div>
+
+        <button type="submit" class="submit-button">Submit</button>
+      </form>
+
+      <h3>Конвертор</h3>
+      <div class="currency-converter">
+        <label for="amount">Amount:</label>
+        <input type="number" name="amount" v-model="convertor.amount" />
+
+        <label for="fromCurrency">From Currency:</label>
+        <select name="fromCurrency" v-model="convertor.fromCurrency">
+          <option v-for="(c, index) in currencies" :value="c" :key="index">
+            {{ c }}
+          </option>
+        </select>
+
+        <label for="toCurrency">To Currency:</label>
+        <select name="toCurrency" v-model="convertor.toCurrency">
+          <option v-for="(c, index) in currencies" :value="c" :key="index">
+            {{ c }}
+          </option>
+        </select>
+
+        <button @click="convert(convertor)">Convert</button>
+        <h4>Converted Currency {{ converterCurrency }}</h4>
+      </div>
+    </div>
+  </body>
+</html>
