@@ -179,11 +179,12 @@ export default {
     },
 
     editStudent (index) {
+      const { name, group, mark, isDonePr } = this.students[index]
       this.students[index].updateStudent = {
-        name: '',
-        group: '',
-        mark: '',
-        isDonePr: false
+        name: name,
+        group: group,
+        mark: mark,
+        isDonePr: isDonePr
       }
       this.students[index].isEdit = true
     },
