@@ -33,40 +33,33 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import axios from 'axios'
 import { ref, onMounted, toRefs } from 'vue'
 import Modal from './Modal.vue'
 
-export default {
-  components: { Modal },
-  props: {
-    id: String
-  },
-  setup (props) {
-    const isOpen = ref(false)
-    const { id } = toRefs(props)
-    const student = ref({})
-    const loading = ref(true)
-    const error = ref(false)
+const props = defineProps({
+  id: String
+})
+const isOpen = ref(false)
+const { id } = toRefs(props)
+const student = ref({})
+const loading = ref(true)
+const error = ref(false)
 
-    onMounted(() => {
-      axios
-        .get(`http://34.82.81.113:3000/students/${id.value}`)
-        .then(({ data }) => {
-          student.value = data
-          loading.value = false
-        })
-        .catch(err => {
-          console.error(err)
-          error.value = true
-          loading.value = false
-        })
+onMounted(async () => {
+  await axios
+    .get(`http://34.82.81.113:3000/students/${id.value}`)
+    .then(({ data }) => {
+      student.value = data
+      loading.value = false
     })
-
-    return { isOpen, student, loading, error }
-  }
-}
+    .catch(err => {
+      console.error(err)
+      error.value = true
+      loading.value = false
+    })
+})
 </script>
 
 <style scoped>

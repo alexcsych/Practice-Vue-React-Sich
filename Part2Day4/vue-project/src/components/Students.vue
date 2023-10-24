@@ -147,152 +147,129 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import cc from 'currency-codes'
 
-export default {
-  setup () {
-    const students = ref([])
-    const search = ref('')
-    const newStudent = ref({ name: '', group: '', mark: '', isDonePr: false })
-    const updateStudent = ref({
-      name: '',
-      group: '',
-      mark: '',
-      isDonePr: false
-    })
-    const currencies = ref(['UAH', 'EUR', 'USD'])
-    const convertor = ref({
-      amount: '',
-      fromCurrency: '',
-      toCurrency: ''
-    })
-    const converterCurrency = ref('')
+const students = ref([])
+const search = ref('')
+const newStudent = ref({ name: '', group: '', mark: '', isDonePr: false })
+const updateStudent = ref({
+  name: '',
+  group: '',
+  mark: '',
+  isDonePr: false
+})
+const currencies = ref(['UAH', 'EUR', 'USD'])
+const convertor = ref({
+  amount: '',
+  fromCurrency: '',
+  toCurrency: ''
+})
+const converterCurrency = ref('')
 
-    const fetchStudents = () => {
-      axios.get('http://34.82.81.113:3000/students').then(response => {
-        students.value = response.data.map(st => ({
-          ...st,
+const fetchStudents = () => {
+  axios.get('http://34.82.81.113:3000/students').then(response => {
+    students.value = response.data.map(st => ({
+      ...st,
+      isEdit: false
+    }))
+  })
+}
+
+const deleteStudent = id => {
+  axios.delete(`http://34.82.81.113:3000/students/${id}`).then(() => {
+    students.value = students.value.filter(st => st._id !== id)
+  })
+}
+
+const editStudent = index => {
+  const { name, group, mark, isDonePr } = students.value[index]
+  updateStudent.value = { name, group, mark, isDonePr }
+  students.value[index].isEdit = true
+}
+
+const cancelEditStudent = index => {
+  students.value[index].isEdit = false
+}
+
+const saveStudent = (index, id) => {
+  const { name, group, mark, isDonePr } = updateStudent.value
+  if (name && group && mark) {
+    axios
+      .put(`http://34.82.81.113:3000/students/${id}`, {
+        name,
+        group,
+        mark,
+        isDonePr
+      })
+      .then(response => {
+        students.value[index] = {
+          ...response.data,
           isEdit: false
-        }))
+        }
       })
-    }
+  }
+}
 
-    const deleteStudent = id => {
-      axios.delete(`http://34.82.81.113:3000/students/${id}`).then(() => {
-        students.value = students.value.filter(st => st._id !== id)
-      })
-    }
+const createStudent = () => {
+  axios
+    .post('http://34.82.81.113:3000/students', newStudent.value)
+    .then(response => {
+      students.value.push({ ...response.data, isEdit: false })
+      newStudent.value.name = ''
+      newStudent.value.group = ''
+      newStudent.value.mark = ''
+      newStudent.value.isDonePr = false
+    })
+}
 
-    const editStudent = index => {
-      const { name, group, mark, isDonePr } = students.value[index]
-      updateStudent.value = { name, group, mark, isDonePr }
-      students.value[index].isEdit = true
-    }
-
-    const cancelEditStudent = index => {
-      students.value[index].isEdit = false
-    }
-
-    const saveStudent = (index, id) => {
-      const { name, group, mark, isDonePr } = updateStudent.value
-      if (name && group && mark) {
-        axios
-          .put(`http://34.82.81.113:3000/students/${id}`, {
-            name,
-            group,
-            mark,
-            isDonePr
-          })
-          .then(response => {
-            students.value[index] = {
-              ...response.data,
-              isEdit: false
-            }
-          })
-      }
-    }
-
-    const createStudent = () => {
-      axios
-        .post('http://34.82.81.113:3000/students', newStudent.value)
-        .then(response => {
-          students.value.push({ ...response.data, isEdit: false })
-          newStudent.value.name = ''
-          newStudent.value.group = ''
-          newStudent.value.mark = ''
-          newStudent.value.isDonePr = false
-        })
-    }
-
-    const convert = async ({ amount, fromCurrency, toCurrency }) => {
-      if (amount !== '' && fromCurrency !== '' && toCurrency !== '') {
-        if (fromCurrency === toCurrency) {
-          converterCurrency.value = amount
-        } else {
-          const { data } = await axios.get(
-            'https://api.monobank.ua/bank/currency'
+const convert = async ({ amount, fromCurrency, toCurrency }) => {
+  if (amount !== '' && fromCurrency !== '' && toCurrency !== '') {
+    if (fromCurrency === toCurrency) {
+      converterCurrency.value = amount
+    } else {
+      const { data } = await axios.get('https://api.monobank.ua/bank/currency')
+      if (data) {
+        const fromCurrencyCode = cc.code(fromCurrency)
+        const toCurrencyCode = cc.code(toCurrency)
+        if (Number(toCurrencyCode.number) === 980) {
+          const CurrencyRate = data.find(
+            rate =>
+              rate.currencyCodeA === Number(fromCurrencyCode.number) &&
+              rate.currencyCodeB === Number(toCurrencyCode.number)
           )
-          if (data) {
-            const fromCurrencyCode = cc.code(fromCurrency)
-            const toCurrencyCode = cc.code(toCurrency)
-            if (Number(toCurrencyCode.number) === 980) {
-              const CurrencyRate = data.find(
-                rate =>
-                  rate.currencyCodeA === Number(fromCurrencyCode.number) &&
-                  rate.currencyCodeB === Number(toCurrencyCode.number)
-              )
-              converterCurrency.value = amount * CurrencyRate.rateBuy
-            } else if (Number(fromCurrencyCode.number) === 980) {
-              const CurrencyRate = data.find(
-                rate =>
-                  rate.currencyCodeA === Number(toCurrencyCode.number) &&
-                  rate.currencyCodeB === 980
-              )
-              converterCurrency.value = amount / CurrencyRate.rateSell
-            } else {
-              const fromCurrencyRate = data.find(
-                rate =>
-                  rate.currencyCodeA === Number(fromCurrencyCode.number) &&
-                  rate.currencyCodeB === 980
-              )
-              const toCurrencyRate = data.find(
-                rate =>
-                  rate.currencyCodeA === Number(toCurrencyCode.number) &&
-                  rate.currencyCodeB === 980
-              )
-              converterCurrency.value =
-                (amount * fromCurrencyRate.rateBuy) / toCurrencyRate.rateSell
-            }
-          }
+          converterCurrency.value = amount * CurrencyRate.rateBuy
+        } else if (Number(fromCurrencyCode.number) === 980) {
+          const CurrencyRate = data.find(
+            rate =>
+              rate.currencyCodeA === Number(toCurrencyCode.number) &&
+              rate.currencyCodeB === 980
+          )
+          converterCurrency.value = amount / CurrencyRate.rateSell
+        } else {
+          const fromCurrencyRate = data.find(
+            rate =>
+              rate.currencyCodeA === Number(fromCurrencyCode.number) &&
+              rate.currencyCodeB === 980
+          )
+          const toCurrencyRate = data.find(
+            rate =>
+              rate.currencyCodeA === Number(toCurrencyCode.number) &&
+              rate.currencyCodeB === 980
+          )
+          converterCurrency.value =
+            (amount * fromCurrencyRate.rateBuy) / toCurrencyRate.rateSell
         }
       }
     }
-
-    onMounted(() => {
-      fetchStudents()
-    })
-
-    return {
-      students,
-      search,
-      newStudent,
-      updateStudent,
-      currencies,
-      convertor,
-      converterCurrency,
-      fetchStudents,
-      deleteStudent,
-      editStudent,
-      cancelEditStudent,
-      saveStudent,
-      createStudent,
-      convert
-    }
   }
 }
+
+onMounted(() => {
+  fetchStudents()
+})
 </script>
 
 <style scoped>
