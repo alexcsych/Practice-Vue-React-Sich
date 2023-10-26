@@ -77,7 +77,7 @@
               </button>
             </td>
             <td>
-              <button class="editButton" @click="canselEditStudents(index)">
+              <button class="editButton" @click="cancelEditStudent(index)">
                 Скасувати
               </button>
             </td>
@@ -207,7 +207,7 @@ const deleteStudent = id => {
 
 const editStudent = index => {
   const { name, group, mark, isDonePr } = students.value[index]
-  updateStudent.value = { name, group, mark, isDonePr }
+  students.value[index].updateStudent = { name, group, mark, isDonePr }
   students.value[index].isEdit = true
 }
 
