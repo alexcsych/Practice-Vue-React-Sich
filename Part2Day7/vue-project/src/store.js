@@ -3,22 +3,25 @@ import createPersistedState from 'vuex-persistedstate'
 import SecureLS from 'secure-ls'
 var ls = new SecureLS({ isCompression: false })
 
-const store = createStore({
-  state: {
-    count: 0,
-    theme: 'light'
+const state = {
+  count: 0,
+  theme: 'light'
+}
+
+const mutations = {
+  setTheme (state, theme) {
+    state.selectedTheme = theme
   },
-  mutations: {
-    setTheme (state, theme) {
-      state.selectedTheme = theme
-    },
-    setCount: (state, count) => (state.count = count)
-  },
-  getters: {
-    getCount: state => {
-      return state.count
-    }
-  },
+  setCount (state, count) {
+    state.count = count
+  }
+}
+
+const getters = {
+  getCount: state => state.count
+}
+
+export default createStore({
   plugins: [
     createPersistedState({
       storage: {
@@ -27,7 +30,8 @@ const store = createStore({
         removeItem: key => ls.remove(key)
       }
     })
-  ]
+  ],
+  state,
+  getters,
+  mutations
 })
-
-export default store
