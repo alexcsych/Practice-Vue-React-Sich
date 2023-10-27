@@ -110,7 +110,6 @@ onMounted(async () => {
   background-color: #555;
   color: #fff;
 }
-
 .content {
   display: flex;
   align-items: center;

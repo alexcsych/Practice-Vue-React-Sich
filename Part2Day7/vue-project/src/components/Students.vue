@@ -343,6 +343,7 @@ table {
 }
 
 th {
+  color: black;
   background-color: #f2f2f2;
   padding: 8px;
 }
@@ -383,6 +384,7 @@ td {
   width: 300px;
   margin: 0 auto;
   padding: 20px;
+  color: black;
   background-color: #f4f4f4;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -430,6 +432,7 @@ td {
   max-width: 300px;
   margin: 20px auto;
   padding: 10px;
+  color: black;
   background-color: #f3f3f3;
   border-radius: 5px;
 }
